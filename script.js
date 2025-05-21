@@ -49,6 +49,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 const section = this.getAttribute('href').replace('#', '');
                 if (section === 'espacios') {
                     cargarSeccionEspacios();
+                } else if (section === 'usuarios') {
+                    cargarSeccionUsuarios();
                 }
             });
         });
@@ -126,6 +128,44 @@ function cargarSeccionEspacios() {
     setupFileHandling();
     console.log('Manejadores de archivos configurados');
 }
+function cargarSeccionUsuarios() {
+    const contentArea = document.querySelector(".content-area");
+    contentArea.innerHTML = `
+        <div class="usuarios-container">
+            <h2>Gestión de Usuarios</h2>
+            <form id="formCrearUsuario" class="user-form">
+                <div class="form-group">
+                    <input type="text" id="nuevoUsuario" required>
+                    <label for="nuevoUsuario">Nombre de usuario</label>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="passwordUsuario" required>
+                    <label for="passwordUsuario">Contraseña</label>
+                </div>
+                <div class="form-group">
+                    <select id="rolUsuario" required>
+                        <option value="" disabled selected>Selecciona rol</option>
+                        <option value="admin">Administrador</option>
+                        <option value="usuario">Usuario</option>
+                    </select>
+                </div>
+                <button type="submit" class="login-button">Crear usuario</button>
+            </form>
+            <div id="mensajeUsuario" class="mensaje-usuario"></div>
+        </div>
+    `;
+
+    const form = document.getElementById("formCrearUsuario");
+    form.addEventListener("submit", function(e) {
+        e.preventDefault();
+        const nombre = document.getElementById("nuevoUsuario").value;
+        const rol = document.getElementById("rolUsuario").value;
+        const mensaje = document.getElementById("mensajeUsuario");
+        mensaje.textContent = `Usuario ${nombre} creado con rol ${rol}`;
+        form.reset();
+    });
+}
+
 
 async function procesarPDF(file) {
     const processingStatus = document.getElementById('processingStatus');
