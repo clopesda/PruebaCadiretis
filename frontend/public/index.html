@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>React Login</title>
+  <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+  <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    function Login() {
+      const [username, setUsername] = React.useState('');
+      const [password, setPassword] = React.useState('');
+      const [message, setMessage] = React.useState('');
+
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        }).then(res => {
+          if (res.ok) return res.json();
+          throw new Error('Invalid credentials');
+        }).then(() => {
+          setMessage('Login successful');
+        }).catch(() => {
+          setMessage('Login failed');
+        });
+      };
+
+      return (
+        <div>
+          <h2>Login</h2>
+          <form onSubmit={handleSubmit}>
+            <input
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={e => setUsername(e.target.value)}
+            />
+            <br />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+            />
+            <br />
+            <button type="submit">Login</button>
+          </form>
+          <p>{message}</p>
+        </div>
+      );
+    }
+
+    ReactDOM.render(<Login />, document.getElementById('root'));
+  </script>
+</body>
+</html>
