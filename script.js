@@ -49,6 +49,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 const section = this.getAttribute('href').replace('#', '');
                 if (section === 'espacios') {
                     cargarSeccionEspacios();
+                } else if (section === 'reservas') {
+                    cargarSeccionReservas();
                 }
             });
         });
@@ -453,4 +455,36 @@ function setupPlanoControls() {
         scale = 1;
         canvas.style.transform = `scale(${scale})`;
     };
-} 
+}
+
+function cargarSeccionReservas() {
+    const contentArea = document.querySelector('.content-area');
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth();
+    const monthNames = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+    const daysOfWeek = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const startDay = new Date(year, month, 1).getDay();
+
+    const mesasTotales = 10;
+    const data = {};
+    for (let d = 1; d <= daysInMonth; d++) {
+        const reserved = Math.floor(Math.random() * (mesasTotales + 1));
+        data[d] = { libres: mesasTotales - reserved, reservadas: reserved };
+    }
+
+    let html = `<h2>Calendario de reservas - ${monthNames[month]} ${year}</h2>`;
+    html += '<div class="calendar">';
+    daysOfWeek.forEach(d => { html += `<div class="day-name">${d}</div>`; });
+    for (let i = 0; i < startDay; i++) {
+        html += '<div class="day empty"></div>';
+    }
+    for (let d = 1; d <= daysInMonth; d++) {
+        const info = data[d];
+        html += `<div class="day"><span class="date">${d}</span><span class="status">${info.libres} libres / ${info.reservadas} reservadas</span></div>`;
+    }
+    html += '</div>';
+    contentArea.innerHTML = html;
+}
+
