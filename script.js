@@ -70,6 +70,11 @@ function irABackOffice() {
     }
 }
 
+function volverHome() {
+    // Simple redirección a la página principal
+    window.location.replace('./home.html');
+}
+
 function cargarSeccionEspacios() {
     const contentArea = document.querySelector('.content-area');
     console.log('Cargando sección de espacios...');
@@ -249,20 +254,12 @@ function mostrarError(mensaje) {
 
 async function extraerImagenDePDF(file) {
     console.log('Iniciando extracción de imagen del PDF');
-    try {
-        const pdfData = await pdfjsLib.getDocument(URL.createObjectURL(file)).promise;
-        console.log('PDF cargado correctamente');
-        
-        const page = await pdfData.getPage(1);
-        console.log('Primera página obtenida');
-        
-        const viewport = page.getViewport({ scale: 1.5 });
-        const canvas = document.createElement('canvas');
-    // Cargar el PDF
     const pdfData = await pdfjsLib.getDocument(URL.createObjectURL(file)).promise;
+    console.log('PDF cargado correctamente');
+
     const page = await pdfData.getPage(1);
-    
-    // Crear canvas temporal para la extracción
+    console.log('Primera página obtenida');
+
     const viewport = page.getViewport({ scale: 1.5 });
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
