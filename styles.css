@@ -202,6 +202,37 @@ input:valid + label {
     background-color: #3d5266;
 }
 
+/* Mapa de oficinas en la home */
+.office-map {
+    display: grid;
+    grid-template-columns: repeat(4, 60px);
+    gap: 10px;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+.desk {
+    width: 60px;
+    height: 60px;
+    border: 2px solid var(--secondary-color);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.desk.selected {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+.desk-info {
+    margin-top: 20px;
+    font-weight: 500;
+}
+
 /* Estilos base para el back-office */
 .backoffice-body {
     margin: 0;

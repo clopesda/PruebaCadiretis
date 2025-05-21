@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 e.preventDefault();
                 menuItems.forEach(i => i.classList.remove('active'));
                 this.classList.add('active');
-                
+
                 // Cargar el contenido según la sección
                 const section = this.getAttribute('href').replace('#', '');
                 if (section === 'espacios') {
@@ -52,6 +52,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         });
+    }
+
+    if (isHomePage) {
+        inicializarMapaHome();
     }
 });
 
@@ -453,4 +457,22 @@ function setupPlanoControls() {
         scale = 1;
         canvas.style.transform = `scale(${scale})`;
     };
-} 
+}
+
+function inicializarMapaHome() {
+    const desks = document.querySelectorAll('.desk');
+    const info = document.getElementById('desk-info');
+    const number = document.getElementById('desk-number');
+
+    desks.forEach(desk => {
+        desk.addEventListener('click', () => {
+            desks.forEach(d => d.classList.remove('selected'));
+            desk.classList.add('selected');
+
+            if (info && number) {
+                info.style.display = 'block';
+                number.textContent = desk.dataset.mesa;
+            }
+        });
+    });
+}
