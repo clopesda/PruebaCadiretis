@@ -21,19 +21,30 @@ document.addEventListener('DOMContentLoaded', function() {
     if (loginForm) {
         loginForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            // Mock del login - siempre exitoso
-            localStorage.setItem('usuarioLogado', 'true');
-            
-            // Redirigir a home
-            window.location.replace('home.html');
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Verificar credenciales del usuario administrador
+            if (email === 'carlos.lopes@basetis.com' && password === '1234Basetis') {
+                localStorage.setItem('usuarioLogado', 'true');
+                localStorage.setItem('usuarioEmail', email);
+                localStorage.setItem('usuarioRol', 'admin');
+                window.location.replace('home.html');
+            } else {
+                alert('Credenciales incorrectas');
+            }
         });
     }
 
     // Verificar acceso al back-office
     const isBackOfficePage = window.location.pathname.includes('backoffice.html');
-    if (isBackOfficePage && !localStorage.getItem('usuarioLogado')) {
-        window.location.replace('./login.html');
+    if (isBackOfficePage) {
+        const logado = localStorage.getItem('usuarioLogado');
+        const rol = localStorage.getItem('usuarioRol');
+        if (!logado || rol !== 'admin') {
+            window.location.replace('./login.html');
+        }
     }
 
     // Manejador para los items del menú
@@ -57,13 +68,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function cerrarSesion() {
     localStorage.removeItem('usuarioLogado');
+    localStorage.removeItem('usuarioEmail');
+    localStorage.removeItem('usuarioRol');
     window.location.href = 'login.html';
 }
 
 function irABackOffice() {
     // Aseguramos que el usuario está logado antes de navegar
     const usuarioLogado = localStorage.getItem('usuarioLogado');
-    if (usuarioLogado) {
+    const rol = localStorage.getItem('usuarioRol');
+    if (usuarioLogado && rol === 'admin') {
         window.location.replace('./backoffice.html');
     } else {
         window.location.replace('./login.html');
