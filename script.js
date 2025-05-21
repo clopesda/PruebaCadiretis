@@ -49,6 +49,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 const section = this.getAttribute('href').replace('#', '');
                 if (section === 'espacios') {
                     cargarSeccionEspacios();
+                } else if (section === 'documentos') {
+                    cargarSeccionDocumentos();
                 }
             });
         });
@@ -125,6 +127,31 @@ function cargarSeccionEspacios() {
     // Configurar el manejo de archivos
     setupFileHandling();
     console.log('Manejadores de archivos configurados');
+}
+
+function cargarSeccionDocumentos() {
+    const contentArea = document.querySelector('.content-area');
+    contentArea.innerHTML = `
+        <div class="documentos-container">
+            <h2>Subir Documentos PDF</h2>
+            <div class="upload-section">
+                <div class="upload-area">
+                    <i class="fas fa-file-upload"></i>
+                    <p>Selecciona o arrastra un archivo PDF</p>
+                    <input type="file" id="docPdfInput" accept=".pdf" hidden>
+                    <button onclick="document.getElementById('docPdfInput').click()" class="upload-button">Subir archivo</button>
+                </div>
+            </div>
+            <div id="docUploadStatus" class="upload-info"></div>
+        </div>
+    `;
+
+    const input = document.getElementById('docPdfInput');
+    input.addEventListener('change', () => {
+        if (input.files && input.files[0]) {
+            document.getElementById('docUploadStatus').innerHTML = `<p>Archivo "${input.files[0].name}" seleccionado.</p>`;
+        }
+    });
 }
 
 async function procesarPDF(file) {
